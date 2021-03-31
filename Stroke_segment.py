@@ -6,7 +6,8 @@ from Statistics import *
 
 if __name__ == "__main__":
 
-    os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+    #os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     path_h5_save = './h5/'
     output_path = './model/'
     dataset_name = '0.8'
