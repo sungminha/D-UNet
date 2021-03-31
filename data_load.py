@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
     start = time.time()
     #path_nii = './ATLAS_R1.1'
-    path_nii = "/home/hasm/comp_space/Data/Lesion/ATLAS_R1.1"
+    path_nii = "/home/hasm/comp_space/Data/Lesion/ATLAS_R1.1/Only_Data"
     path_save = './h5'
     ratio = 0.8
     img_size = [192, 192]
