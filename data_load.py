@@ -23,7 +23,7 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
 
         list_patients = os.listdir(path_nii+'/'+dir_site)
         for dir_patients in list_patients:
-            print( "".join(["dir_patients: ", str(dir_patients)]), flush=True)
+            print( "".join(["nii_to_h5 - list_pateints: dir_site | dir_patients: ", str(dir_site), " | ", str(dir_patients)]), flush=True)
             for t0n in ['/t01/', '/t02/']:
                 try:
                     location = path_nii+'/' + dir_site + '/' + dir_patients + t0n
@@ -37,6 +37,7 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
     random.shuffle(list_data)
     for num, data_dir in enumerate(list_data):
         for i, deface in enumerate(data_dir):
+            print("".join(["nii_to_h5 - shuffle: num | data_dir | deface : ", str(num), " | ", str(i), " | ", str(deface)]), flush=True)
             if deface.find('deface') != -1:
                 ori = nib.load(deface)
                 ori = ori.get_fdata()
@@ -51,12 +52,13 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
 
         label_merge = np.zeros_like(ori)
         for i, dir_data in enumerate(list_data[num]):
+            print("".join(["nii_to_h5 - label_merge: num | list_data | dir_data : ", str(num), " | ", str(i), " | ", str(dir_data)]), flush=True)
             img = nib.load(dir_data)
             img = np.array(img.get_fdata())
             img = img.transpose((2, 1, 0))
             label_merge = label_merge + img
         
-        print(str(num)+'/'+str(len(list_data)),'max=',str(ori.max()),'min=',str(ori.min()))
+        print(str(num)+'/'+str(len(list_data)),'max=',str(ori.max()),'min=',str(ori.min()), flush=True)
         if num == 0 or num == int(ratio * len(list_data)):
             data = copy.deepcopy(ori)
             label = copy.deepcopy(label_merge)
@@ -65,7 +67,7 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
             label = np.concatenate((label, label_merge), axis=0)
 
         if num == int(ratio * len(list_data))-1:
-            print('saving train set...')
+            print('saving train set...',flush=True)
             data = np.array(data, dtype=float)
             label = np.array(label, dtype=bool)
             #'''
@@ -75,17 +77,17 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
             file.close()
             data = []
             label = []
-            print('Finished!')
+            print('Finished!',flush=True)
 
         elif num == len(list_data)-1:
-            print('saving test set...')
+            print('saving test set...',flush=True)
             data = np.array(data, dtype=float)
             label = np.array(label, dtype=bool)
             file = h5py.File(path_save + '/test_' + str(ratio), 'w')
             file.create_dataset('data', data=data)
             file.create_dataset('label', data=label)
             file.close()
-            print('Finished!')
+            print('Finished!',flush=True)
     return ori_max, ori_min
             #'''
 
