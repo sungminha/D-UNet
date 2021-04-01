@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import os
 from model import *
@@ -8,15 +9,22 @@ if __name__ == "__main__":
 
     #os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
-    path_h5_save = './h5/'
+    path_h5_save = './h5_subset/'
+    
+    h5_data_path = "/home/sung/git/WUSTL_2021A_ESE_5934_DUnet/h5_subset"
+    
     output_path = './model/'
+    #try:
+    #  os.mkdir(output_path)
+    #except OSError as error:
+    #  print(error)
     dataset_name = '0.8'
     load_weight = ''
     mode = 'train'  # use 'train' or 'detect'
     img_size = [192, 192]
     batch_size = 36
     lr = 1e-4
-    gpu_used = 2
+    gpu_used = 1
 
     model = D_Unet()
     h5_name = 'DUnet'
@@ -28,17 +36,17 @@ if __name__ == "__main__":
     model.compile(optimizer=SGD(lr=lr), loss=EML, metrics=[dice_coef])
 
     if load_weight != '':
-        print('loading：', load_weight)
+        print('loading：', load_weight, flush=True)
         model.load_weights(load_weight, by_name=True)
     else:
-        print('no loading weight!')
+        print('no loading weight!', flush=True)
 
     if mode == 'train':
-        h5 = h5py.File('/home/siat/data/train')
+        h5 = h5py.File(os.path.join(h5_data_path, 'train0.8'))
         original = h5['data']
         label = h5['label']
         # label = h5['label_change']
-        h5 = h5py.File('/home/siat/data/test')
+        h5 = h5py.File(os.path.join(h5_data_path, 'test0.8'))
         original_val = h5['data_val']
         label_val = h5['label_val']
         # label_val = h5['label_val_change']
@@ -47,7 +55,7 @@ if __name__ == "__main__":
         num_train_steps = math.floor(len(original) / batch_size)
         num_val_steps = math.floor(len(original_val) / batch_size)
 
-        print('training data:' + str(len(original)) + '  validation data:' + str(len(original_val)))
+        print('training data:' + str(len(original)) + '  validation data:' + str(len(original_val)), flush=True)
 
         # print('using:', str(time.time() - time_start) + 's\n')
         time_start = time.time()
@@ -76,12 +84,12 @@ if __name__ == "__main__":
                             shuffle=True, callbacks=[checkpointer], validation_data=validation_generator, validation_steps=num_val_steps, verbose=2)
 
     elif mode == 'detect':
-        print('loading testing-data...')
+        print('loading testing-data...', flush=True)
         h5 = h5py.File('./h5/x4/test')
         original = h5['data_val']
         label = h5['label_val']
         # label_val_change = h5['label_val_change']
-        print('load data done!')
+        print('load data done!', flush=True)
 
         model.compile(optimizer=Adam(lr=lr), loss=dice_coef_loss, metrics=[TP, TN, FP, FN, dice_coef])
 
@@ -119,7 +127,7 @@ if __name__ == "__main__":
                                          'recall_mean: ' + str(np.mean(recall_list)) + ' recall_std:' + str(
             np.std(recall_list, ddof=1)) + '\n'
                                            'precision_mean: ' + str(np.mean(precision_list)) + ' precision_std:' + str(
-            np.std(precision_list, ddof=1)) + '\n')
+            np.std(precision_list, ddof=1)) + '\n', flush=True)
 
         #np.save('/root/桌面/paper材料/box/' + h5_name, dice_list)
         # plt.boxplot(dice_list)
@@ -128,7 +136,7 @@ if __name__ == "__main__":
         #'''
         tim = time.time()
         predict = model.predict(original, verbose=1, batch_size=batch_size)
-        print('predict patients: '+str(len(predict)/189)+'   using: '+str(time.time()-tim)+'s')
+        print('predict patients: '+str(len(predict)/189)+'   using: '+str(time.time()-tim)+'s', flush=True)
         predict[predict >= 0.5] = 1
         predict[predict < 0.5] = 0
 
