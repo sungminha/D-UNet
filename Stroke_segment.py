@@ -42,11 +42,11 @@ if __name__ == "__main__":
         print('no loading weight!', flush=True)
 
     if mode == 'train':
-        h5 = h5py.File(os.path.join(h5_data_path, 'train0.8'))
+        h5 = h5py.File(os.path.join(h5_data_path, 'train_0.8'))
         original = h5['data']
         label = h5['label']
         # label = h5['label_change']
-        h5 = h5py.File(os.path.join(h5_data_path, 'test0.8'))
+        h5 = h5py.File(os.path.join(h5_data_path, 'test_0.8'))
         original_val = h5['data_val']
         label_val = h5['label_val']
         # label_val = h5['label_val_change']
