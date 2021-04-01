@@ -23,7 +23,7 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
 
         list_patients = os.listdir(path_nii+'/'+dir_site)
         for dir_patients in list_patients:
-            print("".join(["dir_patients: ", str(dir_patients)]))
+            print("".join(["dir_patients: ", str(dir_patients)]), flush=True))
             for t0n in ['/t01/', '/t02/']:
                 try:
                     location = path_nii+'/' + dir_site + '/' + dir_patients + t0n
@@ -208,15 +208,15 @@ if __name__ == "__main__":
     path_save = './h5'
     ratio = 0.8
     img_size = [192, 192]
-    print("".join(["path_nii: ", str(path_nii)]))
-    print("".join(["path_save: ", str(path_save)]))
-    print("".join(["ratio: ", str(ratio)]))
+    print("".join(["path_nii: ", str(path_nii)]), flush=True))
+    print("".join(["path_save: ", str(path_save)]), flush=True))
+    print("".join(["ratio: ", str(ratio)]), flush=True))
     ori_max, ori_min = nii_to_h5(path_nii, path_save, ratio=ratio)
     data_adjust(ori_max, ori_min, path_save)
 
-    print('using :{}'.format(time.time()-start))
+    print('using :{}'.format(time.time()-start), flush=True))
 
-    print('loading training-data...')
+    print('loading training-data...', flush=True))
     time_start = time.time()
     original, label = load_h5(path_save + 'train_' + str(ratio), size=(img_size[1], img_size[0]),
                               test_programme = None)
@@ -237,7 +237,7 @@ if __name__ == "__main__":
     del label
     file.close()
 
-    print('training_data done!, using:', str(time.time() - time_start) + 's\n\nloading validation-data...')
+    print('training_data done!, using:', str(time.time() - time_start) + 's\n\nloading validation-data...', flush=True))
     time_start = time.time()
     original_val, label_val = load_h5(path_save + 'test_' + str(ratio), size=(img_size[1], img_size[0]))
     file = h5py.File(path_save+'/train', 'w')
@@ -258,4 +258,4 @@ if __name__ == "__main__":
     del label_val
     file.close()
 
-    print('validation_data done!, using:', str(time.time() - time_start) + 's\n\n')
+    print('validation_data done!, using:', str(time.time() - time_start) + 's\n\n', flush=True))
