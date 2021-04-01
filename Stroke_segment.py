@@ -36,7 +36,7 @@ if __name__ == "__main__":
     model.compile(optimizer=SGD(lr=lr), loss=EML, metrics=[dice_coef])
 
     if load_weight != '':
-        print('loading：', load_weight, flush=True)
+        print("".join(['loading：', str(load_weight)]), flush=True)
         model.load_weights(load_weight, by_name=True)
     else:
         print('no loading weight!', flush=True)
