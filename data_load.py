@@ -124,8 +124,8 @@ def data_adjust(max, min, h5_path, ratio=0.8):
 def load_h5(path_h5, shuffle=False, size=None, test_programme=None, only=False):
     h5 = h5py.File(path_h5)
     print("".join(["load_h5: path_h5 = ", str(path_h5)]),flush=True)
-    print("load_h5: h5 = ")
-    print(h5)
+    #print("load_h5: h5 = ")
+    #print(h5)
     data = h5['data'][:]
     label = h5['label'][:]
 
@@ -210,11 +210,18 @@ def data_toxn(data, z):
 if __name__ == "__main__":
 
     start = time.time()
+    #Original Code
     #path_nii = './ATLAS_R1.1'
+
+    #CHPC
     #path_nii = "/home/hasm/comp_space/Data/Lesion/ATLAS_R1.1/Only_Data"
+    path_nii = "/scratch/hasm/Data/Lesion/ATLAS_R1.1/Subset_Symlink"
+    
+    #Local Machine
     #path_nii = "/home/sung/Data/Lesion/Subset_Symlink"
-    path_nii = "/home/sung/Data/Lesion/ATLAS_R1.1"
-    path_save = './h5_full'
+    #path_nii = "/home/sung/Data/Lesion/ATLAS_R1.1"
+    
+    path_save = './h5_subset'
     try:
       os.mkdir(path_save)
     except OSError as error:
@@ -223,6 +230,7 @@ if __name__ == "__main__":
       os.mkdir(os.path.join(path_save, "detection"))
     except OSError as error:
       print(error)
+
     ratio = 0.8
     img_size = [192, 192]
     print("".join(["path_nii: ", str(path_nii)]), flush=True)
