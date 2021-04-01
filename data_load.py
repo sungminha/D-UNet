@@ -23,6 +23,7 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
 
         list_patients = os.listdir(path_nii+'/'+dir_site)
         for dir_patients in list_patients:
+            print("".join(["dir_patients: ", str(dir_patients)]))
             for t0n in ['/t01/', '/t02/']:
                 try:
                     location = path_nii+'/' + dir_site + '/' + dir_patients + t0n
@@ -207,6 +208,9 @@ if __name__ == "__main__":
     path_save = './h5'
     ratio = 0.8
     img_size = [192, 192]
+    print("".join(["path_nii: ", str(path_nii)]))
+    print("".join(["path_save: ", str(path_save)]))
+    print("".join(["ratio: ", str(ratio)]))
     ori_max, ori_min = nii_to_h5(path_nii, path_save, ratio=ratio)
     data_adjust(ori_max, ori_min, path_save)
 
