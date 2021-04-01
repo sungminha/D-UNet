@@ -24,7 +24,7 @@ if __name__ == "__main__":
     img_size = [192, 192]
     batch_size = 36
     lr = 1e-4
-    gpu_used = 1
+    gpu_used = 0
 
     model = D_Unet()
     h5_name = 'DUnet'
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     if not os.path.exists(output_path):
         os.makedirs(output_path)
     model.summary()
-    model = multi_gpu_model(model, gpus=gpu_used)
+    #model = multi_gpu_model(model, gpus=gpu_used)
     model.compile(optimizer=SGD(lr=lr), loss=EML, metrics=[dice_coef])
 
     if load_weight != '':
@@ -46,7 +46,7 @@ if __name__ == "__main__":
         original = h5['data']
         label = h5['label']
         # label = h5['label_change']
-        h5 = h5py.File(os.path.join(h5_data_path, 'test_0.8'))
+        h5 = h5py.File(os.path.join(h5_data_path, 'train'))
         original_val = h5['data_val']
         label_val = h5['label_val']
         # label_val = h5['label_val_change']
