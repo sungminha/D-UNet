@@ -23,7 +23,7 @@ def nii_to_h5(path_nii,path_save,ratio=0.8):
 
         list_patients = os.listdir(path_nii+'/'+dir_site)
         for dir_patients in list_patients:
-            print("".join(["dir_patients: ", str(dir_patients)]), flush=True))
+            print( "".join(["dir_patients: ", str(dir_patients)]), flush=True)
             for t0n in ['/t01/', '/t02/']:
                 try:
                     location = path_nii+'/' + dir_site + '/' + dir_patients + t0n
